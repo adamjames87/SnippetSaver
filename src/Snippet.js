@@ -40,12 +40,29 @@ class SnippetCommandBar extends Component {
 class SnippetEditor extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = { editorState: EditorState.createEmpty()};
 		this.onChange = (editorState) => this.setState({editorState});
 		this.handleKeyCommand = this.handleKeyCommand.bind(this);
 		this.onBoldClick = this.onBoldClick.bind(this);
 		this.onItalicClick = this.onItalicClick.bind(this);
+		this.hashtagStrategy = this.hashtagStrategy.bind(this);
+		this.HashtagSpan = this.HashtagSpan.bind(this);
+		const compositeDecorator = new CompositeDecorator([
+			{
+				strategy: this.hashtagStrategy,
+				component: this.HashtagSpan
+			}
+		]);
 	}
+
+	hashtagStrategy() {
+	}
+
+	HashtagSpan = (props) => {
+		return <span {...props}>{props.children}</span>
+	}
+
 
 	findWithRegex (regex, contentBlock, callback) {
 	    const text = contentBlock.getText();
@@ -56,9 +73,6 @@ class SnippetEditor extends Component {
         }
 	}
 
-	// hashtagStrategy(contentState, contentBlock, callback) {
-	// 	findWithRegex(HASH_REGEX, contentBlock, callback);
-	// }
 
 
 	onBoldClick() {
