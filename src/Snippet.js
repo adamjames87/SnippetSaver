@@ -37,11 +37,17 @@ class SnippetCommandBar extends Component {
 }
 
 
+const HASHTAG_REGEX =  /\#[\w\u0590-\u05ff]+/g;
+
+const styles = {
+	hashtag: {
+		color: 'rgba(95, 177, 254, 1.0)'
+	}	
+}
 class SnippetEditor extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { editorState: EditorState.createEmpty()};
 		this.onChange = (editorState) => this.setState({editorState});
 		this.handleKeyCommand = this.handleKeyCommand.bind(this);
 		this.onBoldClick = this.onBoldClick.bind(this);
@@ -54,15 +60,16 @@ class SnippetEditor extends Component {
 				component: this.HashtagSpan
 			}
 		]);
+		this.state = { editorState: EditorState.createEmpty(compositeDecorator)};
 	}
 
-	hashtagStrategy() {
+	hashtagStrategy(contentBlock, callback) {
+		this.findWithRegex(HASHTAG_REGEX, contentBlock, callback)
 	}
 
 	HashtagSpan = (props) => {
-		return <span {...props}>{props.children}</span>
+		return <span {...props} style={styles.hashtag}>{props.children}</span>
 	}
-
 
 	findWithRegex (regex, contentBlock, callback) {
 	    const text = contentBlock.getText();
